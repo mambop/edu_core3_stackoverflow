@@ -19,16 +19,16 @@ export default function Register() {
 
         try {
             const newUsername = { username, password, passwordCheck }
-            await axios.post('https://bmw-api.herokuapp.com/api/register', newUsername);
+            await axios.post('http://localhost:8080/api/register', newUsername);
 
             const loginData = { username, password }
-            const loginRes = await axios.post('https://bmw-api.herokuapp.com/api/login', loginData);
+            const loginRes = await axios.post('http://localhost:8080/api/login', loginData);
 
             setUserData({
                 token: loginRes.data.token,
                 user: loginRes.data.username
             })
-            localStorage.setItem('token-key', loginRes.data.token)
+            localStorage.setItem('auth-token', loginRes.data.token)
             history.push('/');
         }
 

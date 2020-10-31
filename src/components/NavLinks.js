@@ -17,11 +17,12 @@ export default function RightNav() {
             token:undefined,
             user:undefined
         });
-        localStorage.setItem('token-key','');
+        localStorage.setItem('auth-token','');
     };
 
     return (
         <nav className='NavLinks'>
+    {/* checks if user exists */}
             {userData.user ?( 
                 <>
             <button onClick={home}>Home</button>

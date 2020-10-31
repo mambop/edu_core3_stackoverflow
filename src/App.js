@@ -17,17 +17,25 @@ function App() {
     token: undefined,
     user: undefined
   })
-  
+
+  const [postData, setPostData] = useState({
+    post:undefined
+  })
+
+  const [commentData, setCommentData] = useState({
+    comment:undefined
+  })
+
   useEffect(() => {
     const checkLoggedIn = async () => {
-      let token = localStorage.getItem("token-key")
+      let token = localStorage.getItem("auth-token")
       if (token === null) {
-        localStorage.setItem('token-key', '');
+        localStorage.setItem('auth-token', '');
         token = '';
       }
-
+//get logged in user
       if (token) {
-        const userRes = await axios.get('https://bmw-api.herokuapp.com/api/user',
+        const userRes = await axios.get('http://localhost:8080/api/user',
           {
             headers: { 'x-auth-token': token },
           });
@@ -35,6 +43,32 @@ function App() {
         setUserData({
           token,
           user: userRes.data
+        })
+//get posts of logged in user
+      }
+      if (token) {
+        const postRes = await axios.get('http://localhost:8080/api/posts',
+         {
+          headers: { 'x-auth-token': token },
+        });
+
+        setPostData({
+
+          post: postRes.data
+        })
+
+      }
+
+//get comments logged in user
+      if (token) {
+        const commentRes = await axios.get('http://localhost:8080/api/comments',
+         {
+          headers: { 'x-auth-token': token },
+        });
+
+        setCommentData({
+
+          comment: commentRes.data
         })
 
       }
@@ -48,7 +82,10 @@ function App() {
 
     <div className='App'>
       <BrowserRouter>
+      <UserContext.Provider value={{ commentData, setCommentData}}>
+      <UserContext.Provider value={{ postData, setPostData}}>
         <UserContext.Provider value={{ userData, setUserData }}>
+   
           <Navbar />
           <div className='container'>
             <Switch>
@@ -59,6 +96,9 @@ function App() {
             </Switch>
           </div>
         </UserContext.Provider>
+        </UserContext.Provider>
+        </UserContext.Provider>
+
 
       </BrowserRouter>
     </div> 

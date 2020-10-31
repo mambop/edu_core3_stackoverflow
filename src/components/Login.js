@@ -21,13 +21,13 @@ export default function Login(){
 
         try{
         const loginUser = {username,password}
-        const loginRes = await axios.post('https://bmw-api.herokuapp.com/api/login',loginUser)
+        const loginRes = await axios.post('http://localhost:8080/api/login',loginUser)
     
         setUserData({
             token:loginRes.data.token,
             user:loginRes.data.username
         })
-        localStorage.setItem('token-key',loginRes.data.token)
+        localStorage.setItem('auth-token',loginRes.data.token)
         history.push('/');
         }
         catch(err){

@@ -7,7 +7,7 @@ function DisplayPosts() {
 const [posts,setPosts] = useState([]);
 
 useEffect(() =>{
-    axios.get('http://localhost:8080/api/post')
+    axios.get('http://localhost:8080/api/posts')
     // axios.get('https://jsonplaceholder.typicode.com/posts')
     .then((result) =>{
         console.log(result)

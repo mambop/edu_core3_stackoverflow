@@ -6,12 +6,9 @@ import ErrorsMessage from './ErrorsMessage';
 
 function AddPosts() {
 
-     //post state
-  const [post, setPost] = useState({
-    post: undefined
-   
-  })
-  const {setUserData } = useContext(UserContext)
+    //posts state
+    const [post, setPost] = useState('')
+    const { setPostData } = useContext(UserContext)
 
     const [error, setError] = useState();
     const history = useHistory();
@@ -22,15 +19,13 @@ function AddPosts() {
         e.preventDefault();
 
         try {
-            const newPost = { post}
-            const postData = await axios.post('http://localhost:8080/api/post', newPost);
+            const newPost = { post }
+            const postRes = await axios.post('http://localhost:8080/api/posts', newPost);
 
-        
-            setPost({
-                post: postData.data.post
-        
+            setPostData({
+                post: postRes.data.post,
             })
-
+            // localStorage.setItem('auth-token', postRes.data.token)
             history.push('/');
         }
 
@@ -41,13 +36,14 @@ function AddPosts() {
 
         }
     };
+
     return (
         <div className='page'>
             <h2>New Question</h2>
             {{ error } && (<ErrorsMessage message={error} />)}
 
-            <form onSubmit={handleSubmit} className='formLayout'>
-                <textarea rows='10' cols='60' id='post' onChange={(e) => setPost(e.target.value)} placeholder='Add Question Here ......'></textarea>
+            <form className='formLayout' onSubmit={handleSubmit}>
+                <textarea rows='10' cols='60' id='post' value={post} onChange={(e) => setPost(e.target.value)} placeholder='Add Question Here ......'></textarea>
                 <input type='submit' value='Submit' />
             </form>
         </div>
