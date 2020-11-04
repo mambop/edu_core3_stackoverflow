@@ -7,28 +7,30 @@ import ErrorsMessage from './ErrorsMessage';
 function AddPosts() {
 
     //posts state
-    const [post, setPost] = useState('')
+    const [post, setPost] = useState()
+
     const { setPostData } = useContext(UserContext)
 
     const [error, setError] = useState();
     const history = useHistory();
 
 
-
     const handleSubmit = async (e) => {
+
         e.preventDefault();
+        let token = localStorage.getItem("auth-token")
 
         try {
+
             const newPost = { post }
-            const postRes = await axios.post('http://localhost:8080/api/posts', newPost);
-
-            setPostData({
-                post: postRes.data.post,
-            })
-            // localStorage.setItem('auth-token', postRes.data.token)
+            const postRes = await axios.post('https://bmw-api.herokuapp.com/api/posts', newPost, { headers: { 'x-auth-token': token }, });
+            // function adds new post to exsisting posts
+            const addPost = (post) => {
+                setPostData([...post, postRes.data])
+            }
             history.push('/');
+            setPost("");
         }
-
         catch (err) {
             if (err.response.data.msg) {
                 setError(err.response.data.msg)
@@ -39,7 +41,7 @@ function AddPosts() {
 
     return (
         <div className='page'>
-            <h2>New Question</h2>
+            <h2>Post Question</h2>
             {{ error } && (<ErrorsMessage message={error} />)}
 
             <form className='formLayout' onSubmit={handleSubmit}>

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import UserContext from './UserContext'
 
-export default function RightNav() {
+export default function NavLinks() {
 
     const { userData, setUserData } = useContext(UserContext);
 
@@ -14,27 +14,27 @@ export default function RightNav() {
     const newPost = () => history.push('/post');
     const logout = () => {
         setUserData({
-            token:undefined,
-            user:undefined
+            token: undefined,
+            user: undefined
         });
-        localStorage.setItem('auth-token','');
+        localStorage.setItem('auth-token', '');
     };
 
     return (
         <nav className='NavLinks'>
-    {/* checks if user exists */}
-            {userData.user ?( 
+            {/* checks if user exists */}
+            {userData.user ? (
                 <>
-            <button onClick={home}>Home</button>
-            <button onClick={newPost}>New Post</button>   
-            <button onClick={logout}>Logout</button>
-                 </>
-            ):(
-                <>
-                 <button onClick={register}>Register</button>
-                 <button onClick={login}>Login</button> 
-                 </>
-            )}
+                    <button onClick={home}>Home</button>
+                    <button onClick={newPost}>New Post</button>
+                    <button onClick={logout}>Logout</button>
+                </>
+            ) : (
+                    <>
+                        <button onClick={register}>Register</button>
+                        <button onClick={login}>Login</button>
+                    </>
+                )}
         </nav>
     );
 }

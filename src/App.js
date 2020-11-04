@@ -7,8 +7,10 @@ import Register from './components/Register'
 import Login from './components/Login'
 import AddPosts from './components/AddPosts'
 import UserContext from './components/UserContext'
-import DisplayPosts from './components/DisplayPosts';
-
+import PostContext from './components/PostContext'
+import CommentContext from './components/CommentContext'
+import DisplayComments from './components/DisplayComments';
+import AddComments from './components/AddComments'
 
 
 function App() {
@@ -16,15 +18,18 @@ function App() {
   const [userData, setUserData] = useState({
     token: undefined,
     user: undefined
+
   })
 
   const [postData, setPostData] = useState({
-    post:undefined
+    post: undefined
   })
 
   const [commentData, setCommentData] = useState({
-    comment:undefined
+    comment: undefined
   })
+
+  // const [post, setPost] = useState('')
 
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -33,25 +38,32 @@ function App() {
         localStorage.setItem('auth-token', '');
         token = '';
       }
-//get logged in user
+      //get logged in user
       if (token) {
-        const userRes = await axios.get('http://localhost:8080/api/user',
-          {
-            headers: { 'x-auth-token': token },
-          });
+        const userRes = await axios.get('https://bmw-api.herokuapp.com/api/user', { headers: { 'x-auth-token': token } })
 
         setUserData({
           token,
           user: userRes.data
-        })
-//get posts of logged in user
-      }
-      if (token) {
-        const postRes = await axios.get('http://localhost:8080/api/posts',
-         {
-          headers: { 'x-auth-token': token },
+          // id:userRes.data.id,
+          // username:userRes.data.username
         });
 
+      }
+
+      //get posts of logged in user
+      const addPost = (post) => {
+        setPostData([...post,])
+      }
+      if (token) {
+        const postRes = await axios.get('https://bmw-api.herokuapp.com/api/posts',
+          {
+            headers: { 'x-auth-token': token },
+          });
+
+        // const addPost = (post) =>{
+        //   setPostData([...post,postRes.data])
+        // }
         setPostData({
 
           post: postRes.data
@@ -59,12 +71,12 @@ function App() {
 
       }
 
-//get comments logged in user
+      //get comments logged in user
       if (token) {
-        const commentRes = await axios.get('http://localhost:8080/api/comments',
-         {
-          headers: { 'x-auth-token': token },
-        });
+        const commentRes = await axios.get('https://bmw-api.herokuapp.com/api/comments',
+          {
+            headers: { 'x-auth-token': token },
+          });
 
         setCommentData({
 
@@ -72,6 +84,7 @@ function App() {
         })
 
       }
+
 
     }
     checkLoggedIn();
@@ -82,26 +95,29 @@ function App() {
 
     <div className='App'>
       <BrowserRouter>
-      <UserContext.Provider value={{ commentData, setCommentData}}>
-      <UserContext.Provider value={{ postData, setPostData}}>
-        <UserContext.Provider value={{ userData, setUserData }}>
-   
-          <Navbar />
-          <div className='container'>
-            <Switch>
-              <Route exact path='/' component={Home} />
-              <Route path='/login' component={Login} />
-              <Route path='/register' component={Register} />
-              <Route path='/post' component={AddPosts} />
-            </Switch>
-          </div>
-        </UserContext.Provider>
-        </UserContext.Provider>
-        </UserContext.Provider>
+        <CommentContext.Provider value={{ commentData, setCommentData }}>
+          <PostContext.Provider value={{ postData, setPostData }}>
+            <UserContext.Provider value={{ userData, setUserData }}>
+
+              <Navbar />
+              <div className='container'>
+                <Switch>
+                  <Route exact path='/' component={Home} />
+                  <Route path='/login' component={Login} />
+                  <Route path='/register' component={Register} />
+                  <Route path='/post' component={AddPosts} />
+                  <Route path='/comment' component={DisplayComments} />
+
+                  <Route path='/comments' component={AddComments} />
+                </Switch>
+              </div>
+            </UserContext.Provider>
+          </PostContext.Provider>
+        </CommentContext.Provider>
 
 
       </BrowserRouter>
-    </div> 
+    </div>
   );
 }
 

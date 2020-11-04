@@ -6,7 +6,7 @@ import NavLinks from './NavLinks';
 function Navbar() {
     return (
         <header className='nav-wrap'>
-            <Link to='/'><h1 className='logo'>Stackover Flow</h1></Link>
+            <Link to='/'><h1 className='logo'>BMW</h1></Link>
             <NavLinks />
         </header>
     )
